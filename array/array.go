@@ -13,6 +13,8 @@ func (err StaticArrayErr) Error() string {
 
 const ErrOutOfBound = StaticArrayErr("index is out of bound")
 
+// Time: O(n)
+// Space: O(n)
 func NewStaticArray(length uint) *StaticArray {
 	store := make([]int, length)
 	return &StaticArray{
@@ -21,6 +23,8 @@ func NewStaticArray(length uint) *StaticArray {
 	}
 }
 
+// Time: O(1)
+// Space: O(1)
 func (sa *StaticArray) Read(index uint) (int, error) {
 	if index >= sa.length {
 		return 0, ErrOutOfBound
@@ -29,6 +33,8 @@ func (sa *StaticArray) Read(index uint) (int, error) {
 	return sa.store[index], nil
 }
 
+// Time: O(1)
+// Space: O(1)
 func (sa *StaticArray) Update(index uint, value int) error {
 	if index >= sa.length {
 		return ErrOutOfBound
@@ -38,6 +44,8 @@ func (sa *StaticArray) Update(index uint, value int) error {
 	return nil
 }
 
+// Time: O(1)
+// Space: O(1)
 func (sa *StaticArray) Delete(index uint) error {
 	if index >= sa.length {
 		return ErrOutOfBound
