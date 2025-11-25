@@ -1,11 +1,17 @@
 package array
 
-import "errors"
-
 type StaticArray struct {
 	store  []int
 	length uint
 }
+
+type StaticArrayErr string
+
+func (err StaticArrayErr) Error() string {
+	return string(err)
+}
+
+const ErrOutOfBound = StaticArrayErr("index is out of bound")
 
 func NewStaticArray(length uint) *StaticArray {
 	store := make([]int, length)
@@ -17,8 +23,17 @@ func NewStaticArray(length uint) *StaticArray {
 
 func (sa *StaticArray) Read(index uint) (int, error) {
 	if index >= sa.length {
-		return 0, errors.New("index is out of bound")
+		return 0, ErrOutOfBound
 	}
 
 	return sa.store[index], nil
+}
+
+func (sa *StaticArray) Update(index uint, value int) error {
+	if index >= sa.length {
+		return ErrOutOfBound
+	}
+
+	sa.store[index] = value
+	return nil
 }
