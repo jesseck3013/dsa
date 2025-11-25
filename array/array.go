@@ -37,3 +37,15 @@ func (sa *StaticArray) Update(index uint, value int) error {
 	sa.store[index] = value
 	return nil
 }
+
+func (sa *StaticArray) Delete(index uint) error {
+	if index >= sa.length {
+		return ErrOutOfBound
+	}
+
+	for i := index; i+1 < sa.length; i++ {
+		sa.store[i] = sa.store[i+1]
+	}
+	sa.length--
+	return nil
+}
