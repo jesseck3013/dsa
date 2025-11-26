@@ -10,10 +10,11 @@ type DynamicArray struct {
 }
 
 func NewDynamicArray(length uint) *DynamicArray {
+	cap := length * 2
 	return &DynamicArray{
-		store:    make([]int, length),
+		store:    make([]int, cap),
 		length:   length,
-		capacity: length,
+		capacity: cap,
 	}
 }
 
@@ -32,4 +33,21 @@ func (da *DynamicArray) Update(index uint, value int) error {
 
 	da.store[index] = value
 	return nil
+}
+
+// Mostly O(1)
+// Worst case O(n)
+func (da *DynamicArray) Insert(value int) {
+	// when store is full
+	if da.length == da.capacity {
+		newStore := make([]int, da.capacity*2)
+		copy(newStore, da.store)
+		newStore[da.length] = value
+		da.store = newStore
+		da.length++
+		da.capacity *= 2
+	} else {
+		da.store[da.length] = value
+		da.length++
+	}
 }

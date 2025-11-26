@@ -12,7 +12,7 @@ func TestDynamicArray(t *testing.T) {
 		t.Errorf("expected length %d, got %d", length, got.length)
 	}
 
-	if got.capacity != length {
+	if got.capacity != length*2 {
 		t.Errorf("expected capacity %d, got %d", length, got.capacity)
 	}
 
@@ -57,5 +57,50 @@ func TestDAUpdate(t *testing.T) {
 		da := NewDynamicArray(10)
 		err := da.Update(100, 100)
 		AssertError(t, ErrOutOfBound, err)
+	})
+}
+
+func TestDAInsert(t *testing.T) {
+	t.Run("store is not full", func(t *testing.T) {
+		da := NewDynamicArray(10)
+		want := 99
+		da.Insert(want)
+
+		var wantLength uint = 11
+		if da.length != wantLength {
+			t.Errorf("expected length %d, got %d", wantLength, da.length)
+		}
+
+		var wantCapacity uint = 20
+		if da.capacity != wantCapacity {
+			t.Errorf("expected capacity %d, got %d", wantCapacity, da.length)
+		}
+
+		got, err := da.Read(10)
+		AssertNoError(t, err)
+		AssertValue(t, want, got)
+	})
+
+	t.Run("store is full", func(t *testing.T) {
+		da := NewDynamicArray(1)
+		da.Insert(10)
+		// da is full
+
+		want := 99
+		da.Insert(want)
+
+		var wantLength uint = 3
+		if da.length != 3 {
+			t.Errorf("expected length %d, got %d", wantLength, da.length)
+		}
+
+		var wantCapacity uint = 4
+		if da.capacity != wantCapacity {
+			t.Errorf("expected capacity %d, got %d", wantCapacity, da.length)
+		}
+
+		got, err := da.Read(2)
+		AssertNoError(t, err)
+		AssertValue(t, want, got)
 	})
 }
