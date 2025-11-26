@@ -40,3 +40,22 @@ func TestDARead(t *testing.T) {
 		AssertError(t, ErrOutOfBound, err)
 	})
 }
+
+func TestDAUpdate(t *testing.T) {
+	t.Run("In Bound", func(t *testing.T) {
+		da := NewDynamicArray(10)
+		want := 10
+		err := da.Update(2, want)
+		AssertNoError(t, err)
+
+		got, err := da.Read(2)
+		AssertNoError(t, err)
+		AssertValue(t, got, want)
+	})
+
+	t.Run("out of Bound", func(t *testing.T) {
+		da := NewDynamicArray(10)
+		err := da.Update(100, 100)
+		AssertError(t, ErrOutOfBound, err)
+	})
+}

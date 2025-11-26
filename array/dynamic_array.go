@@ -24,3 +24,12 @@ func (da *DynamicArray) Read(index uint) (int, error) {
 
 	return da.store[index], nil
 }
+
+func (da *DynamicArray) Update(index uint, value int) error {
+	if index >= da.capacity {
+		return ErrOutOfBound
+	}
+
+	da.store[index] = value
+	return nil
+}
