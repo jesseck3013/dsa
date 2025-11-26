@@ -5,13 +5,13 @@ type StaticArray struct {
 	length uint
 }
 
-type StaticArrayErr string
+type ArrayErr string
 
-func (err StaticArrayErr) Error() string {
+func (err ArrayErr) Error() string {
 	return string(err)
 }
 
-const ErrOutOfBound = StaticArrayErr("index is out of bound")
+const ErrOutOfBound = ArrayErr("index is out of bound")
 
 // Time: O(n)
 // Space: O(n)
