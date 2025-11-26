@@ -47,7 +47,7 @@ func TestSARead(t *testing.T) {
 
 	t.Run("out of Bound", func(t *testing.T) {
 		sa := NewStaticArray(10)
-		err := sa.Delete(100)
+		_, err := sa.Read(100)
 		AssertError(t, ErrOutOfBound, err)
 	})
 }
@@ -94,7 +94,7 @@ func TestSADelete(t *testing.T) {
 
 	t.Run("out of Bound", func(t *testing.T) {
 		sa := NewStaticArray(10)
-		err := sa.Update(100, 10)
+		err := sa.Delete(100)
 
 		AssertError(t, ErrOutOfBound, err)
 	})
