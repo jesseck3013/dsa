@@ -4,17 +4,21 @@ import (
 	"testing"
 )
 
+func AssertLenCap(t *testing.T, da *DynamicArray, wantLength, wantCapacity uint) {
+	if da.length != wantLength {
+		t.Errorf("expected length %d, got %d", wantLength, da.length)
+	}
+
+	if da.capacity != wantCapacity {
+		t.Errorf("expected capacity %d, got %d", wantCapacity, da.length)
+	}
+}
+
 func TestDynamicArray(t *testing.T) {
 	var length uint = 100
 	got := NewDynamicArray(100)
 
-	if got.length != length {
-		t.Errorf("expected length %d, got %d", length, got.length)
-	}
-
-	if got.capacity != length*2 {
-		t.Errorf("expected capacity %d, got %d", length, got.capacity)
-	}
+	AssertLenCap(t, got, length, length*2)
 
 	for i := range length {
 		if got.store[i] != 0 {
@@ -66,15 +70,7 @@ func TestDAInsert(t *testing.T) {
 		want := 99
 		da.Insert(want)
 
-		var wantLength uint = 11
-		if da.length != wantLength {
-			t.Errorf("expected length %d, got %d", wantLength, da.length)
-		}
-
-		var wantCapacity uint = 20
-		if da.capacity != wantCapacity {
-			t.Errorf("expected capacity %d, got %d", wantCapacity, da.length)
-		}
+		AssertLenCap(t, da, 11, 20)
 
 		got, err := da.Read(10)
 		AssertNoError(t, err)
@@ -89,18 +85,36 @@ func TestDAInsert(t *testing.T) {
 		want := 99
 		da.Insert(want)
 
-		var wantLength uint = 3
-		if da.length != 3 {
-			t.Errorf("expected length %d, got %d", wantLength, da.length)
-		}
-
-		var wantCapacity uint = 4
-		if da.capacity != wantCapacity {
-			t.Errorf("expected capacity %d, got %d", wantCapacity, da.length)
-		}
+		AssertLenCap(t, da, 3, 4)
 
 		got, err := da.Read(2)
 		AssertNoError(t, err)
 		AssertValue(t, want, got)
+	})
+}
+
+func TestDADelete(t *testing.T) {
+	t.Run("in bound", func(t *testing.T) {
+		da := NewDynamicArray(4)
+		for i := range 4 {
+			da.Update(uint(i), i)
+		}
+
+		err := da.Delete(0)
+		AssertNoError(t, err)
+
+		for i := range 3 {
+			got, err := da.Read(uint(i))
+			AssertNoError(t, err)
+			AssertValue(t, i+1, got)
+		}
+
+		AssertLenCap(t, da, 3, 8)
+	})
+
+	t.Run("out of bound", func(t *testing.T) {
+		da := NewDynamicArray(0)
+		err := da.Delete(0)
+		AssertError(t, ErrOutOfBound, err)
 	})
 }

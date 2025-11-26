@@ -51,3 +51,19 @@ func (da *DynamicArray) Insert(value int) {
 		da.length++
 	}
 }
+
+func shiftLeft(s []int, index uint) {
+	for i := index; i < uint(len(s)-1); i++ {
+		s[i] = s[i+1]
+	}
+}
+
+func (da *DynamicArray) Delete(index uint) error {
+	if index < da.capacity {
+		shiftLeft(da.store, index)
+		da.length--
+		return nil
+	} else {
+		return ErrOutOfBound
+	}
+}
