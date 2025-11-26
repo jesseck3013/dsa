@@ -46,3 +46,44 @@ func TestFilter(t *testing.T) {
 		t.Errorf("expected count %d, got %d", wantCount, gotCount)
 	}
 }
+
+func TestDelete(t *testing.T) {
+	mt := NewMT()
+	n3 := NewNode(3, mt)
+	n2 := NewNode(2, n3)
+	n1 := NewNode(1, n2)
+
+	n := n1.Delete(n2)
+
+	wantCount := 2
+	gotCount := n.Count()
+	if gotCount != wantCount {
+		t.Errorf("expected count %d, got %d", wantCount, gotCount)
+	}
+}
+
+func TestSame(t *testing.T) {
+	t.Run("two empty lists are same", func(t *testing.T) {
+		mt1 := NewMT()
+		mt2 := NewMT()
+		got := mt1.Same(mt2)
+		want := true
+		if got != want {
+			t.Errorf("expected %v, got %v", want, got)
+		}
+	})
+
+	t.Run("two non-empty lists are same", func(t *testing.T) {
+		mt1 := NewMT()
+		n1 := NewNode(1, mt1)
+
+		mt2 := NewMT()
+		n2 := NewNode(1, mt2)
+
+		got := n1.Same(n2)
+		want := true
+		if got != want {
+			t.Errorf("expected %v, got %v", want, got)
+		}
+	})
+}
