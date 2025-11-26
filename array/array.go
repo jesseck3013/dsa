@@ -46,6 +46,10 @@ func (sa *StaticArray) Update(index uint, value int) error {
 
 // Time: O(1)
 // Space: O(1)
+// There is no deletion in the data store which means
+// the underlying array size does not change.
+// This method only shift all items whose index is larger than
+// the target index to their left with one index.
 func (sa *StaticArray) Delete(index uint) error {
 	if index >= sa.length {
 		return ErrOutOfBound
