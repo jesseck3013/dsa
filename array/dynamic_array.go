@@ -3,30 +3,31 @@ package array
 // The Downside of StaticArray is that its size is fixed.
 // To Solve this issue, we introduce dynamic array.
 
-type DynamicArray struct {
-	store    []int
+type DynamicArray[T any] struct {
+	store    []T
 	length   uint
 	capacity uint
 }
 
-func NewDynamicArray(length uint) *DynamicArray {
+func NewDynamicArray[T any](length uint) *DynamicArray[T] {
 	cap := length * 2
-	return &DynamicArray{
-		store:    make([]int, cap),
+	return &DynamicArray[T]{
+		store:    make([]T, cap),
 		length:   length,
 		capacity: cap,
 	}
 }
 
-func (da *DynamicArray) Read(index uint) (int, error) {
+func (da *DynamicArray[T]) Read(index uint) (T, error) {
 	if index >= da.capacity {
-		return 0, ErrOutOfBound
+		var zero T
+		return zero, ErrOutOfBound
 	}
 
 	return da.store[index], nil
 }
 
-func (da *DynamicArray) Update(index uint, value int) error {
+func (da *DynamicArray[T]) Update(index uint, value T) error {
 	if index >= da.capacity {
 		return ErrOutOfBound
 	}
@@ -37,10 +38,10 @@ func (da *DynamicArray) Update(index uint, value int) error {
 
 // Mostly O(1)
 // Worst case O(n)
-func (da *DynamicArray) Insert(value int) {
+func (da *DynamicArray[T]) Insert(value T) {
 	// when store is full
 	if da.length == da.capacity {
-		newStore := make([]int, da.capacity*2)
+		newStore := make([]T, da.capacity*2)
 		copy(newStore, da.store)
 		newStore[da.length] = value
 		da.store = newStore
@@ -52,13 +53,13 @@ func (da *DynamicArray) Insert(value int) {
 	}
 }
 
-func shiftLeft(s []int, index uint) {
+func shiftLeft[T any](s []T, index uint) {
 	for i := index; i < uint(len(s)-1); i++ {
 		s[i] = s[i+1]
 	}
 }
 
-func (da *DynamicArray) Delete(index uint) error {
+func (da *DynamicArray[T]) Delete(index uint) error {
 	if index < da.capacity {
 		shiftLeft(da.store, index)
 		da.length--

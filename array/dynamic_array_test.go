@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func AssertLenCap(t *testing.T, da *DynamicArray, wantLength, wantCapacity uint) {
+func AssertLenCap[T any](t *testing.T, da *DynamicArray[T], wantLength, wantCapacity uint) {
 	if da.length != wantLength {
 		t.Errorf("expected length %d, got %d", wantLength, da.length)
 	}
@@ -16,7 +16,7 @@ func AssertLenCap(t *testing.T, da *DynamicArray, wantLength, wantCapacity uint)
 
 func TestDynamicArray(t *testing.T) {
 	var length uint = 100
-	got := NewDynamicArray(100)
+	got := NewDynamicArray[int](100)
 
 	AssertLenCap(t, got, length, length*2)
 
@@ -29,7 +29,7 @@ func TestDynamicArray(t *testing.T) {
 
 func TestDARead(t *testing.T) {
 	t.Run("In Bound", func(t *testing.T) {
-		da := NewDynamicArray(10)
+		da := NewDynamicArray[int](10)
 		want := 10
 		da.store[1] = want
 		got, err := da.Read(1)
@@ -39,7 +39,7 @@ func TestDARead(t *testing.T) {
 	})
 
 	t.Run("out of Bound", func(t *testing.T) {
-		da := NewDynamicArray(10)
+		da := NewDynamicArray[int](10)
 		_, err := da.Read(100)
 		AssertError(t, ErrOutOfBound, err)
 	})
@@ -47,7 +47,7 @@ func TestDARead(t *testing.T) {
 
 func TestDAUpdate(t *testing.T) {
 	t.Run("In Bound", func(t *testing.T) {
-		da := NewDynamicArray(10)
+		da := NewDynamicArray[int](10)
 		want := 10
 		err := da.Update(2, want)
 		AssertNoError(t, err)
@@ -58,7 +58,7 @@ func TestDAUpdate(t *testing.T) {
 	})
 
 	t.Run("out of Bound", func(t *testing.T) {
-		da := NewDynamicArray(10)
+		da := NewDynamicArray[int](10)
 		err := da.Update(100, 100)
 		AssertError(t, ErrOutOfBound, err)
 	})
@@ -66,7 +66,7 @@ func TestDAUpdate(t *testing.T) {
 
 func TestDAInsert(t *testing.T) {
 	t.Run("store is not full", func(t *testing.T) {
-		da := NewDynamicArray(10)
+		da := NewDynamicArray[int](10)
 		want := 99
 		da.Insert(want)
 
@@ -78,7 +78,7 @@ func TestDAInsert(t *testing.T) {
 	})
 
 	t.Run("store is full", func(t *testing.T) {
-		da := NewDynamicArray(1)
+		da := NewDynamicArray[int](1)
 		da.Insert(10)
 		// da is full
 
@@ -95,7 +95,7 @@ func TestDAInsert(t *testing.T) {
 
 func TestDADelete(t *testing.T) {
 	t.Run("in bound", func(t *testing.T) {
-		da := NewDynamicArray(4)
+		da := NewDynamicArray[int](4)
 		for i := range 4 {
 			da.Update(uint(i), i)
 		}
@@ -113,7 +113,7 @@ func TestDADelete(t *testing.T) {
 	})
 
 	t.Run("out of bound", func(t *testing.T) {
-		da := NewDynamicArray(0)
+		da := NewDynamicArray[int](0)
 		err := da.Delete(0)
 		AssertError(t, ErrOutOfBound, err)
 	})

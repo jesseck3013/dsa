@@ -1,7 +1,7 @@
 package array
 
-type StaticArray struct {
-	store  []int
+type StaticArray[T any] struct {
+	store  []T
 	length uint
 }
 
@@ -15,9 +15,9 @@ const ErrOutOfBound = ArrayErr("index is out of bound")
 
 // Time: O(n)
 // Space: O(n)
-func NewStaticArray(length uint) *StaticArray {
-	store := make([]int, length)
-	return &StaticArray{
+func NewStaticArray[T any](length uint) *StaticArray[T] {
+	store := make([]T, length)
+	return &StaticArray[T]{
 		store:  store,
 		length: length,
 	}
@@ -25,9 +25,10 @@ func NewStaticArray(length uint) *StaticArray {
 
 // Time: O(1)
 // Space: O(1)
-func (sa *StaticArray) Read(index uint) (int, error) {
+func (sa *StaticArray[T]) Read(index uint) (T, error) {
 	if index >= sa.length {
-		return 0, ErrOutOfBound
+		var zero T
+		return zero, ErrOutOfBound
 	}
 
 	return sa.store[index], nil
@@ -35,7 +36,7 @@ func (sa *StaticArray) Read(index uint) (int, error) {
 
 // Time: O(1)
 // Space: O(1)
-func (sa *StaticArray) Update(index uint, value int) error {
+func (sa *StaticArray[T]) Update(index uint, value T) error {
 	if index >= sa.length {
 		return ErrOutOfBound
 	}
@@ -50,7 +51,7 @@ func (sa *StaticArray) Update(index uint, value int) error {
 // the underlying array size does not change.
 // This method only shift all items whose index is larger than
 // the target index to their left with one index.
-func (sa *StaticArray) Delete(index uint) error {
+func (sa *StaticArray[T]) Delete(index uint) error {
 	if index >= sa.length {
 		return ErrOutOfBound
 	}

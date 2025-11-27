@@ -6,7 +6,7 @@ import (
 
 func TestStaticArray(t *testing.T) {
 	length := 100
-	got := NewStaticArray(100)
+	got := NewStaticArray[int](100)
 
 	for i := range length {
 		if got.store[i] != 0 {
@@ -36,7 +36,7 @@ func AssertValue(t *testing.T, want, got int) {
 
 func TestSARead(t *testing.T) {
 	t.Run("In Bound", func(t *testing.T) {
-		sa := NewStaticArray(10)
+		sa := NewStaticArray[int](10)
 		want := 10
 		sa.store[1] = want
 		got, err := sa.Read(1)
@@ -46,7 +46,7 @@ func TestSARead(t *testing.T) {
 	})
 
 	t.Run("out of Bound", func(t *testing.T) {
-		sa := NewStaticArray(10)
+		sa := NewStaticArray[int](10)
 		_, err := sa.Read(100)
 		AssertError(t, ErrOutOfBound, err)
 	})
@@ -54,7 +54,7 @@ func TestSARead(t *testing.T) {
 
 func TestSAUpdate(t *testing.T) {
 	t.Run("In Bound", func(t *testing.T) {
-		sa := NewStaticArray(10)
+		sa := NewStaticArray[int](10)
 		want := 10
 		sa.store[1] = want
 		err := sa.Update(1, 10)
@@ -68,7 +68,7 @@ func TestSAUpdate(t *testing.T) {
 	})
 
 	t.Run("out of Bound", func(t *testing.T) {
-		sa := NewStaticArray(10)
+		sa := NewStaticArray[int](10)
 		err := sa.Update(100, 10)
 
 		AssertError(t, ErrOutOfBound, err)
@@ -77,7 +77,7 @@ func TestSAUpdate(t *testing.T) {
 
 func TestSADelete(t *testing.T) {
 	t.Run("In Bound", func(t *testing.T) {
-		sa := NewStaticArray(10)
+		sa := NewStaticArray[int](10)
 		sa.Update(3, 10)
 		sa.Delete(3)
 
@@ -93,7 +93,7 @@ func TestSADelete(t *testing.T) {
 	})
 
 	t.Run("out of Bound", func(t *testing.T) {
-		sa := NewStaticArray(10)
+		sa := NewStaticArray[int](10)
 		err := sa.Delete(100)
 
 		AssertError(t, ErrOutOfBound, err)
