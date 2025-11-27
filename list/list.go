@@ -10,6 +10,7 @@ type List[T comparable] interface {
 	Same(List[T]) bool
 	SameNode(*Node[T]) bool
 	SameMT(*MT[T]) bool
+	Search(*Node[T]) int
 }
 
 // Represent an empty list
@@ -42,6 +43,10 @@ func (mt *MT[T]) SameNode(n *Node[T]) bool {
 
 func (mt *MT[T]) SameMT(n *MT[T]) bool {
 	return true
+}
+
+func (mt *MT[T]) Search(n *Node[T]) int {
+	return -1
 }
 
 type Node[T comparable] struct {
@@ -86,6 +91,17 @@ func (n *Node[T]) SameNode(target *Node[T]) bool {
 
 func (n *Node[T]) SameMT(mt *MT[T]) bool {
 	return false
+}
+
+func (n *Node[T]) Search(target *Node[T]) int {
+	if n == target {
+		return 0
+	}
+
+	if n.rest.Search(target) == -1 {
+		return -1
+	}
+	return 1 + n.rest.Search(target)
 }
 
 func NewNode[T comparable](value T, rest List[T]) *Node[T] {

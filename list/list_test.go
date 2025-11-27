@@ -74,3 +74,32 @@ func TestSame(t *testing.T) {
 		}
 	})
 }
+
+func TestSearch(t *testing.T) {
+	t.Run("Search a node in the list", func(t *testing.T) {
+		mt := NewMT[int]()
+		n3 := NewNode(3, mt)
+		n2 := NewNode(2, n3)
+		n1 := NewNode(1, n2)
+
+		want := 1
+		got := n1.Search(n2)
+		if got != want {
+			t.Errorf("expected %d, got %d", want, got)
+		}
+	})
+
+	t.Run("Search a node out of the list", func(t *testing.T) {
+		mt := NewMT[int]()
+		n4 := NewNode(4, mt)
+		n3 := NewNode(3, mt)
+		n2 := NewNode(2, n3)
+		n1 := NewNode(1, n2)
+
+		want := -1
+		got := n1.Search(n4)
+		if got != want {
+			t.Errorf("expected %d, got %d", want, got)
+		}
+	})
+}
