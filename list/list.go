@@ -1,75 +1,66 @@
 package list
 
-type CompareFunc func(int) bool
+type CompareFunc[T comparable] func(T) bool
 
-type List interface {
+type List[T comparable] interface {
 	Count() int
-	Sum() int
-	Filter(CompareFunc) List
-	Delete(*Node) List
+	Filter(CompareFunc[T]) List[T]
+	Delete(*Node[T]) List[T]
 
-	Same(List) bool
-	SameNode(*Node) bool
-	SameMT(*MT) bool
+	Same(List[T]) bool
+	SameNode(*Node[T]) bool
+	SameMT(*MT[T]) bool
 }
 
 // Represent an empty list
-type MT struct {
+type MT[T comparable] struct {
 }
 
-func NewMT() *MT {
-	return &MT{}
+func NewMT[T comparable]() *MT[T] {
+	return &MT[T]{}
 }
 
-func (mt *MT) Count() int {
+func (mt *MT[T]) Count() int {
 	return 0
 }
 
-func (mt *MT) Sum() int {
-	return 0
-}
-
-func (mt *MT) Filter(comp CompareFunc) List {
+func (mt *MT[T]) Filter(comp CompareFunc[T]) List[T] {
 	return mt
 }
 
-func (mt *MT) Delete(target *Node) List {
+func (mt *MT[T]) Delete(target *Node[T]) List[T] {
 	return mt
 }
 
-func (mt *MT) Same(l List) bool {
+func (mt *MT[T]) Same(l List[T]) bool {
 	return l.SameMT(mt)
 }
 
-func (mt *MT) SameNode(n *Node) bool {
+func (mt *MT[T]) SameNode(n *Node[T]) bool {
 	return false
 }
 
-func (mt *MT) SameMT(n *MT) bool {
+func (mt *MT[T]) SameMT(n *MT[T]) bool {
 	return true
 }
 
-type Node struct {
-	value int
-	rest  List
+type Node[T comparable] struct {
+	value T
+	rest  List[T]
 }
 
-func (n *Node) Count() int {
+func (n *Node[T]) Count() int {
 	return 1 + n.rest.Count()
 }
 
-func (n *Node) Sum() int {
-	return n.value + n.rest.Sum()
-}
-
-func (n *Node) Filter(comp CompareFunc) List {
+func (n *Node[T]) Filter(comp CompareFunc[T]) List[T] {
 	if comp(n.value) {
 		return NewNode(n.value, n.rest.Filter(comp))
 	}
 	return n.rest.Filter(comp)
 }
 
-func (n *Node) Delete(target *Node) List {
+func (n *Node[T]) Delete(target *Node[T]) List[T] {
 	if n == target {
 		return n.rest
 	}
@@ -77,15 +68,15 @@ func (n *Node) Delete(target *Node) List {
 	return NewNode(n.value, n.rest.Delete(target))
 }
 
-func (n *Node) Same(l List) bool {
+func (n *Node[T]) Same(l List[T]) bool {
 	return l.SameNode(n)
 }
 
-func (n *Node) SameValue(v int) bool {
+func (n *Node[T]) SameValue(v T) bool {
 	return n.value == v
 }
 
-func (n *Node) SameNode(target *Node) bool {
+func (n *Node[T]) SameNode(target *Node[T]) bool {
 	if n.value == target.value {
 		return n.rest.Same(target.rest)
 	}
@@ -93,12 +84,12 @@ func (n *Node) SameNode(target *Node) bool {
 	return false
 }
 
-func (n *Node) SameMT(mt *MT) bool {
+func (n *Node[T]) SameMT(mt *MT[T]) bool {
 	return false
 }
 
-func NewNode(value int, rest List) *Node {
-	return &Node{
+func NewNode[T comparable](value T, rest List[T]) *Node[T] {
+	return &Node[T]{
 		value: value,
 		rest:  rest,
 	}

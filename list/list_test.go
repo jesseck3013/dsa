@@ -3,7 +3,7 @@ package list
 import "testing"
 
 func TestList(t *testing.T) {
-	mt := NewMT()
+	mt := NewMT[int]()
 	n3 := NewNode(3, mt)
 	n2 := NewNode(2, n3)
 	n1 := NewNode(1, n2)
@@ -15,25 +15,12 @@ func TestList(t *testing.T) {
 	}
 }
 
-func TestListSum(t *testing.T) {
-	mt := NewMT()
-	n3 := NewNode(3, mt)
-	n2 := NewNode(2, n3)
-	n1 := NewNode(1, n2)
-
-	want := 6
-	got := n1.Sum()
-	if got != want {
-		t.Errorf("expected %d, got %d", want, got)
-	}
-}
-
 func biggerThan1(v int) bool {
 	return v > 1
 }
 
 func TestFilter(t *testing.T) {
-	mt := NewMT()
+	mt := NewMT[int]()
 	n3 := NewNode(3, mt)
 	n2 := NewNode(2, n3)
 	n1 := NewNode(1, n2)
@@ -48,7 +35,7 @@ func TestFilter(t *testing.T) {
 }
 
 func TestDelete(t *testing.T) {
-	mt := NewMT()
+	mt := NewMT[int]()
 	n3 := NewNode(3, mt)
 	n2 := NewNode(2, n3)
 	n1 := NewNode(1, n2)
@@ -64,8 +51,8 @@ func TestDelete(t *testing.T) {
 
 func TestSame(t *testing.T) {
 	t.Run("two empty lists are same", func(t *testing.T) {
-		mt1 := NewMT()
-		mt2 := NewMT()
+		mt1 := NewMT[int]()
+		mt2 := NewMT[int]()
 		got := mt1.Same(mt2)
 		want := true
 		if got != want {
@@ -74,10 +61,10 @@ func TestSame(t *testing.T) {
 	})
 
 	t.Run("two non-empty lists are same", func(t *testing.T) {
-		mt1 := NewMT()
+		mt1 := NewMT[int]()
 		n1 := NewNode(1, mt1)
 
-		mt2 := NewMT()
+		mt2 := NewMT[int]()
 		n2 := NewNode(1, mt2)
 
 		got := n1.Same(n2)
