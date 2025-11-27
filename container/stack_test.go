@@ -9,9 +9,9 @@ import (
 func TestStack(t *testing.T) {
 	t.Run("non-empty stack Top", func(t *testing.T) {
 		s := NewStack[int]()
-		s.Push(1)
-		s.Push(2)
-		s.Push(3)
+		for i := range 3 {
+			s.Push(i + 1)
+		}
 
 		want := 3
 		got, err := s.Top()
@@ -23,7 +23,7 @@ func TestStack(t *testing.T) {
 		s := NewStack[int]()
 
 		_, err := s.Top()
-		testutils.AssertError(t, ErrEmpty, err)
+		testutils.AssertError(t, ErrStackEmpty, err)
 	})
 }
 
@@ -49,6 +49,6 @@ func TestPop(t *testing.T) {
 		s := NewStack[int]()
 
 		_, err := s.Pop()
-		testutils.AssertError(t, ErrEmpty, err)
+		testutils.AssertError(t, ErrStackEmpty, err)
 	})
 }

@@ -7,7 +7,7 @@ func (s StackErr) Error() string {
 }
 
 const (
-	ErrEmpty = StackErr("Stack is empty")
+	ErrStackEmpty = StackErr("Stack is empty")
 )
 
 type Stack[T any] struct {
@@ -31,7 +31,7 @@ func (s *Stack[T]) Push(value T) {
 func (s *Stack[T]) Top() (T, error) {
 	if s.Empty() {
 		var zero T
-		return zero, ErrEmpty
+		return zero, ErrStackEmpty
 	}
 
 	topIndex := len(s.store) - 1
@@ -41,7 +41,7 @@ func (s *Stack[T]) Top() (T, error) {
 func (s *Stack[T]) Pop() (T, error) {
 	if s.Empty() {
 		var zero T
-		return zero, ErrEmpty
+		return zero, ErrStackEmpty
 	}
 
 	topIndex := len(s.store) - 1
