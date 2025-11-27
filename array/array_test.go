@@ -2,6 +2,8 @@ package array
 
 import (
 	"testing"
+
+	testutils "github.com/jesseck3013/dsa/test_utils"
 )
 
 func TestStaticArray(t *testing.T) {
@@ -15,25 +17,6 @@ func TestStaticArray(t *testing.T) {
 	}
 }
 
-func AssertNoError(t *testing.T, err error) {
-	if err != nil {
-		t.Error(err)
-		panic("expected no err")
-	}
-}
-
-func AssertError(t *testing.T, want, got error) {
-	if want != got {
-		t.Errorf("expected error: %v, got %v", want, got)
-	}
-}
-
-func AssertValue(t *testing.T, want, got int) {
-	if got != want {
-		t.Errorf("expected %d, got %d", want, got)
-	}
-}
-
 func TestSARead(t *testing.T) {
 	t.Run("In Bound", func(t *testing.T) {
 		sa := NewStaticArray[int](10)
@@ -41,14 +24,14 @@ func TestSARead(t *testing.T) {
 		sa.store[1] = want
 		got, err := sa.Read(1)
 
-		AssertNoError(t, err)
-		AssertValue(t, got, want)
+		testutils.AssertNoError(t, err)
+		testutils.AssertValue(t, got, want)
 	})
 
 	t.Run("out of Bound", func(t *testing.T) {
 		sa := NewStaticArray[int](10)
 		_, err := sa.Read(100)
-		AssertError(t, ErrOutOfBound, err)
+		testutils.AssertError(t, ErrOutOfBound, err)
 	})
 }
 
@@ -59,19 +42,19 @@ func TestSAUpdate(t *testing.T) {
 		sa.store[1] = want
 		err := sa.Update(1, 10)
 
-		AssertNoError(t, err)
+		testutils.AssertNoError(t, err)
 
 		got, err := sa.Read(1)
 
-		AssertNoError(t, err)
-		AssertValue(t, want, got)
+		testutils.AssertNoError(t, err)
+		testutils.AssertValue(t, want, got)
 	})
 
 	t.Run("out of Bound", func(t *testing.T) {
 		sa := NewStaticArray[int](10)
 		err := sa.Update(100, 10)
 
-		AssertError(t, ErrOutOfBound, err)
+		testutils.AssertError(t, ErrOutOfBound, err)
 	})
 }
 
@@ -96,6 +79,6 @@ func TestSADelete(t *testing.T) {
 		sa := NewStaticArray[int](10)
 		err := sa.Delete(100)
 
-		AssertError(t, ErrOutOfBound, err)
+		testutils.AssertError(t, ErrOutOfBound, err)
 	})
 }

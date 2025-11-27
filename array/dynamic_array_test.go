@@ -2,6 +2,8 @@ package array
 
 import (
 	"testing"
+
+	testutils "github.com/jesseck3013/dsa/test_utils"
 )
 
 func AssertLenCap[T any](t *testing.T, da *DynamicArray[T], wantLength, wantCapacity uint) {
@@ -34,14 +36,14 @@ func TestDARead(t *testing.T) {
 		da.store[1] = want
 		got, err := da.Read(1)
 
-		AssertNoError(t, err)
-		AssertValue(t, got, want)
+		testutils.AssertNoError(t, err)
+		testutils.AssertValue(t, got, want)
 	})
 
 	t.Run("out of Bound", func(t *testing.T) {
 		da := NewDynamicArray[int](10)
 		_, err := da.Read(100)
-		AssertError(t, ErrOutOfBound, err)
+		testutils.AssertError(t, ErrOutOfBound, err)
 	})
 }
 
@@ -50,17 +52,17 @@ func TestDAUpdate(t *testing.T) {
 		da := NewDynamicArray[int](10)
 		want := 10
 		err := da.Update(2, want)
-		AssertNoError(t, err)
+		testutils.AssertNoError(t, err)
 
 		got, err := da.Read(2)
-		AssertNoError(t, err)
-		AssertValue(t, got, want)
+		testutils.AssertNoError(t, err)
+		testutils.AssertValue(t, got, want)
 	})
 
 	t.Run("out of Bound", func(t *testing.T) {
 		da := NewDynamicArray[int](10)
 		err := da.Update(100, 100)
-		AssertError(t, ErrOutOfBound, err)
+		testutils.AssertError(t, ErrOutOfBound, err)
 	})
 }
 
@@ -73,8 +75,8 @@ func TestDAInsert(t *testing.T) {
 		AssertLenCap(t, da, 11, 20)
 
 		got, err := da.Read(10)
-		AssertNoError(t, err)
-		AssertValue(t, want, got)
+		testutils.AssertNoError(t, err)
+		testutils.AssertValue(t, want, got)
 	})
 
 	t.Run("store is full", func(t *testing.T) {
@@ -88,8 +90,8 @@ func TestDAInsert(t *testing.T) {
 		AssertLenCap(t, da, 3, 4)
 
 		got, err := da.Read(2)
-		AssertNoError(t, err)
-		AssertValue(t, want, got)
+		testutils.AssertNoError(t, err)
+		testutils.AssertValue(t, want, got)
 	})
 }
 
@@ -101,12 +103,12 @@ func TestDADelete(t *testing.T) {
 		}
 
 		err := da.Delete(0)
-		AssertNoError(t, err)
+		testutils.AssertNoError(t, err)
 
 		for i := range 3 {
 			got, err := da.Read(uint(i))
-			AssertNoError(t, err)
-			AssertValue(t, i+1, got)
+			testutils.AssertNoError(t, err)
+			testutils.AssertValue(t, i+1, got)
 		}
 
 		AssertLenCap(t, da, 3, 8)
@@ -115,6 +117,6 @@ func TestDADelete(t *testing.T) {
 	t.Run("out of bound", func(t *testing.T) {
 		da := NewDynamicArray[int](0)
 		err := da.Delete(0)
-		AssertError(t, ErrOutOfBound, err)
+		testutils.AssertError(t, ErrOutOfBound, err)
 	})
 }
