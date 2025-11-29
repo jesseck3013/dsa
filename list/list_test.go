@@ -1,6 +1,10 @@
 package list
 
-import "testing"
+import (
+	"testing"
+
+	testutils "github.com/jesseck3013/dsa/test_utils"
+)
 
 func TestList(t *testing.T) {
 	mt := NewMT[int]()
@@ -100,6 +104,22 @@ func TestSearch(t *testing.T) {
 		got := n1.Search(n4)
 		if got != want {
 			t.Errorf("expected %d, got %d", want, got)
+		}
+	})
+}
+
+func TestInsert(t *testing.T) {
+	t.Run("inserting nodes into a list", func(t *testing.T) {
+		mt := NewMT[int]()
+		n3 := NewNode(3, mt)
+		n2 := NewNode(2, mt)
+		n1 := NewNode(1, mt)
+
+		got := mt.Insert(n3).Insert(n2).Insert(n1)
+
+		s := got.ToSlice()
+		for i := range 3 {
+			testutils.AssertValue(t, i+1, s[i])
 		}
 	})
 }

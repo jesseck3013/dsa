@@ -7,10 +7,13 @@ type List[T comparable] interface {
 	Filter(CompareFunc[T]) List[T]
 	Delete(*Node[T]) List[T]
 
+	Insert(*Node[T]) List[T]
+
 	Same(List[T]) bool
 	SameNode(*Node[T]) bool
 	SameMT(*MT[T]) bool
 	Search(*Node[T]) int
+	ToSlice() []T
 }
 
 // Represent an empty list
@@ -31,6 +34,15 @@ func (mt *MT[T]) Filter(comp CompareFunc[T]) List[T] {
 
 func (mt *MT[T]) Delete(target *Node[T]) List[T] {
 	return mt
+}
+
+func (mt *MT[T]) Insert(n *Node[T]) List[T] {
+	n.rest = mt
+	return n
+}
+
+func (mt *MT[T]) ToSlice() []T {
+	return make([]T, 0)
 }
 
 func (mt *MT[T]) Same(l List[T]) bool {
@@ -102,6 +114,15 @@ func (n *Node[T]) Search(target *Node[T]) int {
 		return -1
 	}
 	return 1 + n.rest.Search(target)
+}
+
+func (n *Node[T]) Insert(head *Node[T]) List[T] {
+	head.rest = n
+	return head
+}
+
+func (n *Node[T]) ToSlice() []T {
+	return append([]T{n.value}, n.rest.ToSlice()...)
 }
 
 func NewNode[T comparable](value T, rest List[T]) *Node[T] {
