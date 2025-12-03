@@ -1,6 +1,8 @@
 package sort
 
-import "testing"
+import (
+	"testing"
+)
 
 func assertSorted(t *testing.T, s []int, wantLength int) {
 	t.Helper()
@@ -28,15 +30,17 @@ type TestCase struct {
 	ExpectedLength int
 }
 
-var testCases = []TestCase{
-	TestCase{"sort unsorted", []int{3, 2, 4, 6, 10}, 5},
-	TestCase{"sort empty", []int{}, 0},
-	TestCase{"sort 1-item slice", []int{3}, 1},
-	TestCase{"sort sorted", []int{1, 2, 3, 4, 5}, 5},
+func generateTestCases() []TestCase {
+	return []TestCase{
+		TestCase{"sort unsorted", []int{3, 2, 4, 6, 10}, 5},
+		TestCase{"sort empty", []int{}, 0},
+		TestCase{"sort 1-item slice", []int{3}, 1},
+		TestCase{"sort sorted", []int{1, 2, 3, 4, 5}, 5},
+	}
 }
 
 func TestHeapSort(t *testing.T) {
-	for _, testCase := range testCases {
+	for _, testCase := range generateTestCases() {
 		t.Run(testCase.Name, func(t *testing.T) {
 			HeapSort(testCase.Unsorted)
 			assertSorted(t, testCase.Unsorted, testCase.ExpectedLength)
@@ -45,9 +49,18 @@ func TestHeapSort(t *testing.T) {
 }
 
 func TestMergeSort(t *testing.T) {
-	for _, testCase := range testCases {
+	for _, testCase := range generateTestCases() {
 		t.Run(testCase.Name, func(t *testing.T) {
 			MergeSort(testCase.Unsorted)
+			assertSorted(t, testCase.Unsorted, testCase.ExpectedLength)
+		})
+	}
+}
+
+func TestQuickSort(t *testing.T) {
+	for _, testCase := range generateTestCases() {
+		t.Run(testCase.Name, func(t *testing.T) {
+			QuickSort(testCase.Unsorted)
 			assertSorted(t, testCase.Unsorted, testCase.ExpectedLength)
 		})
 	}
