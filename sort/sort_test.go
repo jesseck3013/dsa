@@ -31,6 +31,7 @@ type TestCase struct {
 var testCases = []TestCase{
 	TestCase{"sort unsorted", []int{3, 2, 4, 6, 10}, 5},
 	TestCase{"sort empty", []int{}, 0},
+	TestCase{"sort 1-item slice", []int{3}, 1},
 	TestCase{"sort sorted", []int{1, 2, 3, 4, 5}, 5},
 }
 
