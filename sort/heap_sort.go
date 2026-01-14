@@ -48,11 +48,12 @@ func (heap *MinHeap) ExtractMin() (int, error) {
 		return res, nil
 	}
 
+	res := (*heap)[0]
 	first, end := 0, len(*heap)-1
 	(*heap).swap(first, end)
 	*heap = (*heap)[:end]
 	(*heap).bubbleDown(first)
-	return (*heap)[first], nil
+	return res, nil
 }
 
 func (heap *MinHeap) swap(index1, index2 int) {
@@ -63,14 +64,26 @@ func (heap *MinHeap) bubbleDown(index int) {
 	end := len(*heap) - 1
 
 	leftIndex, rightIndex := 2*index+1, 2*index+2
-	if leftIndex <= end && (*heap)[index] > (*heap)[leftIndex] {
-		(*heap).swap(index, leftIndex)
-		heap.bubbleDown(leftIndex)
-	} else if rightIndex <= end && (*heap)[index] > (*heap)[rightIndex] {
-		(*heap).swap(index, leftIndex)
-		heap.bubbleDown(rightIndex)
+
+	if rightIndex <= end {
+		if (*heap)[leftIndex] < (*heap)[rightIndex] {
+			if (*heap)[index] > (*heap)[leftIndex] {
+				heap.swap(index, leftIndex)
+				heap.bubbleDown(leftIndex)
+			}
+		} else {
+			if (*heap)[index] > (*heap)[rightIndex] {
+				heap.swap(index, rightIndex)
+				heap.bubbleDown(rightIndex)
+			}
+		}
+	} else if leftIndex <= end {
+		if (*heap)[index] > (*heap)[leftIndex] {
+			heap.swap(index, leftIndex)
+			heap.bubbleDown(leftIndex)
+		}
 	} else {
-		return
+
 	}
 }
 
@@ -82,6 +95,6 @@ func HeapSort(s []int) {
 
 	for i := range s {
 		s[i], _ = heap.ExtractMin()
-
 	}
+
 }
